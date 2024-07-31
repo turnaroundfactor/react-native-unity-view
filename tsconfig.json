@@ -1,17 +1,22 @@
 {
-  "compilerOptions": {
-	"sourceRoot": "./src",
-	"outDir": "./dist",
-	"moduleResolution": "node",
-	"lib": [
-	  "dom",
-	  "es2017"
-	],
-	"jsx": "react",
-	"declaration": true,
-	"sourceMap": true
-  },
-  "exclude": [
-	"node_modules"
-  ]
+    "compileOnSave": true,
+    "compilerOptions": {
+        "jsx": "react",
+        "outDir": "./dist",
+        "allowJs": true,
+        "target": "es5",
+		"lib": ["es2019"],
+        "allowUnreachableCode": false,
+        "noImplicitReturns": true,
+        "noImplicitAny": true,
+        "typeRoots": [ "./typings" ]
+    },
+    "include": [
+        "./**/*"
+    ],
+    "exclude": [
+        "./plugins/**/*",
+        "./typings/**/*",
+        "./dist/**/*" // This is what fixed it!
+    ]
 }

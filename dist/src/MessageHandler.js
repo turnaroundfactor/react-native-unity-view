@@ -1,5 +1,6 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UnityMessagePrefix = void 0;
 var react_native_1 = require("react-native");
 var UnityNativeModule = react_native_1.NativeModules.UnityNativeModule;
 exports.UnityMessagePrefix = '@UnityMessage@';
@@ -8,7 +9,7 @@ var MessageHandler = /** @class */ (function () {
     }
     MessageHandler.deserialize = function (message) {
         if (!MessageHandler.isUnityMessage(message)) {
-            throw new Error("\"" + message + "\" is't an UnityMessage.");
+            throw new Error("\"".concat(message, "\" is't an UnityMessage."));
         }
         message = message.replace(exports.UnityMessagePrefix, '');
         var m = JSON.parse(message);
@@ -37,5 +38,4 @@ var MessageHandler = /** @class */ (function () {
     };
     return MessageHandler;
 }());
-exports["default"] = MessageHandler;
-//# sourceMappingURL=MessageHandler.js.map
+exports.default = MessageHandler;

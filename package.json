@@ -6,12 +6,13 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "compile": "tsc --build",
     "build": "rimraf dist/ && tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/asmadsen/react-native-unity-view.git",
-    "baseUrl": "https://github.com/asmadsen/react-native-unity-view"
+    "url": "git+https://github.com/turnaroundfactor/react-native-unity-view.git",
+    "baseUrl": "https://github.com/turnaroundfactor/react-native-unity-view"
   },
   "keywords": [
     "react-native"
@@ -25,14 +26,19 @@
   "readmeFilename": "README.md",
   "peerDependencies": {
     "react": "^18.2.0",
-    "react-native": "^0.72.3"
+    "react-native": "^0.74.3"
   },
   "devDependencies": {
     "@types/prop-types": "^15.7.3",
-    "@types/react": "^16.9.9",
+    "@types/react": "^17.0.80",
+    "@types/react-dom": "^18.3.0",
+    "@types/react-native": "^0.73.0",
     "react": "^18.2.0",
     "react-native": "^0.72.3",
     "rimraf": "^3.0.0",
-    "typescript": "^3.6.4"
+    "typescript": "^5.5.4"
+  },
+  "resolutions": {
+    "@types/react": "^17.0.0"
   }
 }

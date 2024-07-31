@@ -27,7 +27,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import UnityView, { UnityModule } from '@asmadsen/react-native-unity-view';
 
-const App: () => React$Node = () => {
+const App = () => {
   const [count, setClickCount] = useState(0)
   console.log(count)
   const onUnityMessage = (hander) => {

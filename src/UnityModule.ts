@@ -86,7 +86,7 @@ function handleMessage (message: string) {
             if (m && m.callBack != null) {
                 m.callBack(handler.data)
             }
-            return
+            return null;
         } else {
             return handler
         }
