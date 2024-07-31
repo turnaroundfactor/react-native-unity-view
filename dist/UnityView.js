@@ -95,6 +95,6 @@ const UnityView = ({ onUnityMessage, onMessage, ...props } : UnityViewProps) => 
     )
 }
 */
-NativeUnityView = react_native_1.requireNativeComponent('RNUnityView', UnityView);
+NativeUnityView = react_native_1.requireNativeComponent('UnityView');
 exports["default"] = UnityView;
 //# sourceMappingURL=UnityView.js.map
