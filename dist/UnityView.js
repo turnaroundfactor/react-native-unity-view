@@ -61,6 +61,7 @@ var UnityView = /** @class */ (function (_super) {
     UnityView.prototype.render = function () {
         var props = this.props;
         console.log('rendering unity view');
+        console.log(props);
         return (React.createElement(react_native_1.View, __assign({}, props),
             React.createElement(NativeUnityView, { style: { position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }, onUnityMessage: props.onUnityMessage, onMessage: props.onMessage }),
             props.children));
