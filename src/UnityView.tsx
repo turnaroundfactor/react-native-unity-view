@@ -48,6 +48,7 @@ class UnityView extends Component<UnityViewProps> {
 
     render() {
         const { props } = this
+        console.log('rendering unity view');
         return (
             <View {...props}>
             <NativeUnityView
