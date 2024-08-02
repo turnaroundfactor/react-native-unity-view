@@ -95,6 +95,6 @@ const UnityView = ({ onUnityMessage, onMessage, ...props } : UnityViewProps) => 
 }
 */
 
-NativeUnityView = requireNativeComponent('RNUnityViewManager')
+NativeUnityView = requireNativeComponent('RNUnityView')
 
 export default UnityView;
