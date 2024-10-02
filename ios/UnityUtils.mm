@@ -126,12 +126,15 @@ static BOOL _isUnityReady = NO;
 
 + (void)createPlayer:(void (^)(void))completed
 {
+    NSLog(@"Inside CreatePlayer");
     if (_isUnityReady) {
+        NSLog(@"Unity PLayer is ready");
         completed();
         return;
     }
 
     [[NSNotificationCenter defaultCenter] addObserverForName:@"UnityReady" object:nil queue:[NSOperationQueue mainQueue]  usingBlock:^(NSNotification * _Nonnull note) {
+        NSLog(@"Unity PLayer is ready 2");
         _isUnityReady = YES;
         completed();
     }];
