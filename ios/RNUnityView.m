@@ -14,12 +14,8 @@
 
 - (void)setUnityView:(UIView *)view
 {
-    self.uView = view;
+    self.uView = (RNUnityView *)view;
     [self setNeedsLayout];
-}
-
-- (bool)unityIsInitialized {
-    return [self ufw] && [[self ufw] appController];
 }
 
 - (void)layoutSubviews
@@ -27,15 +23,9 @@
     [super layoutSubviews];
     //[(UIView *)self.uView removeFromSuperview];
     //[self insertSubview:(UIView *)self.uView atIndex:0];
-    NSLog(@"self.bounds: %i", self.bounds);
-    NSLog(@"self.bounds: %@", self.bounds);
-    NSLog(@"%@", NSStringFromCGRect(self.frame));
-    //((UIView *)self.uView).frame = self.bounds;
-    //[(UIView *)self.uView setNeedsLayout];
-    if([self unityIsInitialized]) {
-      self.ufw.appController.rootView.frame = self.bounds;
-      [self addSubview:self.ufw.appController.rootView];
-   }
+    NSLog(@"self.bounds:%@", NSStringFromCGRect(self.frame));
+    (self.uView).frame = self.bounds;
+    [self.uView setNeedsLayout];
 }
 
 @end

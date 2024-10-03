@@ -11,10 +11,10 @@ RCT_EXPORT_MODULE(RNUnityView)
 {
     self.currentView = [[RNUnityView alloc] init];
     if ([UnityUtils isUnityReady]) {
-        [self.currentView setUnityView: [GetAppController() unityView]];
+        [self.currentView setUnityView: (RNUnityView *)[GetAppController() unityView]];
     } else {
         [UnityUtils createPlayer:^{
-            [self.currentView setUnityView: [GetAppController() unityView]];
+            [self.currentView setUnityView: (RNUnityView *)[GetAppController() unityView]];
         }];
         [GetAppController() setUnityMessageHandler: ^(const char* message) {
             [_bridge.eventDispatcher sendDeviceEventWithName:@"onUnityMessage"
