@@ -23,7 +23,7 @@
     [super layoutSubviews];
     [(UIView *)self.uView removeFromSuperview];
     [self insertSubview:(UIView *)self.uView atIndex:0];
-    NSLog(@"self.bounds: %i");
+    NSLog(@"self.bounds: %i", self.bounds);
     ((UIView *)self.uView).frame = self.bounds;
     [(UIView *)self.uView setNeedsLayout];
 }
