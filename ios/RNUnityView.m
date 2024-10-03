@@ -18,6 +18,10 @@
     [self setNeedsLayout];
 }
 
+- (bool)unityIsInitialized {
+    return [self ufw] && [[self ufw] appController];
+}
+
 - (void)layoutSubviews
 {
     [super layoutSubviews];
@@ -26,8 +30,12 @@
     NSLog(@"self.bounds: %i", self.bounds);
     NSLog(@"self.bounds: %@", self.bounds);
     NSLog(@"%@", NSStringFromCGRect(self.frame));
-    ((UIView *)self.uView).frame = self.bounds;
+    //((UIView *)self.uView).frame = self.bounds;
     //[(UIView *)self.uView setNeedsLayout];
+    if([self unityIsInitialized]) {
+      self.ufw.appController.rootView.frame = self.bounds;
+      [self addSubview:self.ufw.appController.rootView];
+   }
 }
 
 @end
