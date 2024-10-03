@@ -25,7 +25,7 @@
     //[self insertSubview:(UIView *)self.uView atIndex:0];
     NSLog(@"self.bounds: %i", self.bounds);
     ((UIView *)self.uView).frame = self.bounds;
-    [(UIView *)self.uView setNeedsLayout];
+    //[(UIView *)self.uView setNeedsLayout];
 }
 
 @end
