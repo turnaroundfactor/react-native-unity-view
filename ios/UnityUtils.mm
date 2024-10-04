@@ -29,12 +29,19 @@ extern "C" bool UnityIsInited()
 }
 
 UnityFramework* UnityFrameworkLoad() {
+    NSLog(@"UnityFrameworkLoad");
     NSString* bundlePath = nil;
     bundlePath = [[NSBundle mainBundle] bundlePath];
     bundlePath = [bundlePath stringByAppendingString: @"/Frameworks/UnityFramework.framework"];
+     NSLog(@"bundlePath: %@", bundlePath);
 
     NSBundle* bundle = [NSBundle bundleWithPath: bundlePath];
-    if ([bundle isLoaded] == false) [bundle load];
+    if ([bundle isLoaded] == false) {
+        NSLog(@"bundle isLoaded is false");
+        [bundle load];
+    }else{
+        NSLog(@"bundle isLoaded is true");
+    }
 
     UnityFramework* ufw = [bundle.principalClass getInstance];
     return ufw;
