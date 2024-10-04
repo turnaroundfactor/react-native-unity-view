@@ -42,7 +42,9 @@ UnityFramework* UnityFrameworkLoad() {
 
 extern "C" void InitUnity()
 {
+    NSLog(@"InitUnity start");
     if (unity_inited) {
+        NSLog(@"unity_inited is true");
         return;
     }
     unity_inited = true;
