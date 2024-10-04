@@ -14,6 +14,7 @@
 
 - (void)setUnityView:(UIView *)view
 {
+    NSLog(@"setUnityView inside function");
     self.uView = (RNUnityView *)view;
     [self setNeedsLayout]; //https://developer.apple.com/documentation/uikit/uiview/1622601-setneedslayout?language=objc
 }
