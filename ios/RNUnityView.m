@@ -12,7 +12,7 @@
 {
 }
 
-- (void)setUnityView:(UIView *)view
+- (void)setUnityView:(UIView *)view //this is not being called, i think this might be wear the issue is?
 {
     NSLog(@"setUnityView inside function");
     self.uView = (RNUnityView *)view;
