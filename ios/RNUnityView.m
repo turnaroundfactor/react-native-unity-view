@@ -22,8 +22,8 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    //[(UIView *)self.uView removeFromSuperview];
-    //[self insertSubview:(UIView *)self.uView atIndex:0];
+    [(UIView *)self.uView removeFromSuperview];
+    [self insertSubview:(UIView *)self.uView atIndex:0];
     NSLog(@"self.bounds:%@", NSStringFromCGRect(self.frame));
     (self.uView).frame = self.bounds;
     [self.uView setNeedsLayout]; //https://developer.apple.com/documentation/uikit/uiview/1622601-setneedslayout?language=objc
