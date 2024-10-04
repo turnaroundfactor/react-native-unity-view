@@ -11,9 +11,12 @@ RCT_EXPORT_MODULE(RNUnityView)
 {
     self.currentView = [[RNUnityView alloc] init];
     if ([UnityUtils isUnityReady]) {
+        NSLog(@"isUnityReady yes");
         [self.currentView setUnityView: (RNUnityView *)[GetAppController() unityView]];
     } else {
+        NSLog(@"isUnityReady no");
         [UnityUtils createPlayer:^{
+            NSLog(@"createPlayer building view");
             [self.currentView setUnityView: (RNUnityView *)[GetAppController() unityView]];
         }];
         [GetAppController() setUnityMessageHandler: ^(const char* message) {
