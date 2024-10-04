@@ -140,18 +140,24 @@ static BOOL _isUnityReady = NO;
     }];
 
     if (UnityIsInited()) {
+        NSLog(@"UnityIsInited");
         return;
+    }
+    else{
+        NSLog(@"UnityIsInited NOT");
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"dispatch_get_main_queue()");
         UIApplication* application = [UIApplication sharedApplication];
 
         // Always keep RN window in top
         application.keyWindow.windowLevel = UIWindowLevelNormal + 1;
-
+        NSLog(@"Before InitUnity");
         InitUnity();
-        
+        NSLog(@"After InitUnity");
         UnityAppController *controller = GetAppController();
+        NSLog(@"after getappcontroller");
         [controller application:application didFinishLaunchingWithOptions:nil];
         [controller applicationDidBecomeActive:application];
         
