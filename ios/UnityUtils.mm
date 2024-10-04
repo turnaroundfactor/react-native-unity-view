@@ -170,6 +170,7 @@ static BOOL _isUnityReady = NO;
         [controller application:application didFinishLaunchingWithOptions:nil];
         [controller applicationDidBecomeActive:application];
         
+        complete();
         // Makes RN window key window to handle events
         [application.windows[1] makeKeyWindow];
         
