@@ -57,6 +57,7 @@ extern "C" void InitUnity()
     unity_inited = true;
 
     ufw = UnityFrameworkLoad();
+    _isUnityReady = true;
 
     [ufw setDataBundleId: "com.unity3d.framework"];
     [ufw frameworkWarmup: g_argc argv: g_argv];
