@@ -57,7 +57,7 @@ extern "C" void InitUnity()
     unity_inited = true;
 
     ufw = UnityFrameworkLoad();
-    _isUnityReady = true;
+    setIsUnityReady(YES);
 
     [ufw setDataBundleId: "com.unity3d.framework"];
     [ufw frameworkWarmup: g_argc argv: g_argv];
@@ -93,6 +93,11 @@ static BOOL _isUnityReady = NO;
 {
     NSLog(@"_isUnityReady: %s", _isUnityReady ? "true" : "false");
     return _isUnityReady;
+}
+
++ (BOOL) setIsUnityReady:(BOOL)value
+{
+    _isUnityReady = value;
 }
 
 + (void)handleAppStateDidChange:(NSNotification *)notification
