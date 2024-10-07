@@ -188,15 +188,13 @@ public static class XcodePostBuild
                 return new string[] {
                     "",
                     "// Added by " + TouchedMarker,
-                    "static UnityAppController *unityAppController = nil;",
-                    "",
                     @"+ (UnityAppController*)GetAppController",
                     "{",
                     "    static dispatch_once_t onceToken;",
                     "    dispatch_once(&onceToken, ^{",
-                    "        unityAppController = [[self alloc] init];",
+                    "        _UnityAppController = [[self alloc] init];",
                     "    });",
-                    "    return unityAppController;",
+                    "    return _UnityAppController;",
                     "}",
                     "",
                     "// Added by " + TouchedMarker,
@@ -230,7 +228,7 @@ public static class XcodePostBuild
             inScope |= line.Contains("- (void)startUnity:");
             markerDetected |= inScope && line.Contains(TouchedMarker);
 
-            if (!inScope || line.Trim() != "}") return new string[] { line };
+            if (!inScope || line.Trim() != "UnityUpdateMuteState([audioSession outputVolume] < 0.01f ? 1 : 0);") return new string[] { line };
             inScope = false;
 
             if (markerDetected)
@@ -240,9 +238,9 @@ public static class XcodePostBuild
             else
             {
                 return new string[] {
+                    "UnityUpdateMuteState([audioSession outputVolume] < 0.01f ? 1 : 0);",
                     "    // Modified by " + TouchedMarker,
                     @"    [[NSNotificationCenter defaultCenter] postNotificationName: @""UnityReady"" object:self];",
-                    "}",
                 };
             }
 
