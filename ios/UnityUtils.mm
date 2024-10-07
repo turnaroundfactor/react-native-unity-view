@@ -90,6 +90,7 @@ static BOOL _isUnityReady = NO;
 
 + (BOOL)isUnityReady
 {
+    NSLog(@"_isUnityReady: %@", _isUnityReady ? "true" : 'false');
     return _isUnityReady;
 }
 
