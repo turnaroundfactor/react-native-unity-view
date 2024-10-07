@@ -90,7 +90,7 @@ static BOOL _isUnityReady = NO;
 
 + (BOOL)isUnityReady
 {
-    NSLog(@"_isUnityReady: %@", _isUnityReady ? "true" : 'false');
+    NSLog(@"_isUnityReady: %s", _isUnityReady ? "true" : "false");
     return _isUnityReady;
 }
 
@@ -170,8 +170,7 @@ static BOOL _isUnityReady = NO;
         NSLog(@"after getappcontroller");
         [controller application:application didFinishLaunchingWithOptions:nil];
         [controller applicationDidBecomeActive:application];
-        
-        complete();
+
         // Makes RN window key window to handle events
         [application.windows[1] makeKeyWindow];
         
