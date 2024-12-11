@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { NativeModules, requireNativeComponent, View, ViewProps, ViewPropTypes } from 'react-native'
+import { NativeModules, requireNativeComponent, View, ViewProps } from 'react-native'
 import * as PropTypes from 'prop-types'
 import MessageHandler from './MessageHandler'
 import { UnityModule, UnityViewMessage } from './UnityModule'
@@ -48,6 +48,8 @@ class UnityView extends Component<UnityViewProps> {
 
     render() {
         const { props } = this
+        console.log('rendering unity view');
+        console.log(props);
         return (
             <View {...props}>
             <NativeUnityView
@@ -93,6 +95,6 @@ const UnityView = ({ onUnityMessage, onMessage, ...props } : UnityViewProps) => 
 }
 */
 
-NativeUnityView = requireNativeComponent('RNUnityView', UnityView)
+NativeUnityView = requireNativeComponent('RNUnityView')
 
 export default UnityView;
