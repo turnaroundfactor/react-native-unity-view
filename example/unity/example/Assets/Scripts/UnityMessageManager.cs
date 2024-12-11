@@ -68,6 +68,8 @@ public class UnityMessageManager : MonoBehaviour
 
     public const string MessagePrefix = "@UnityMessage@";
 
+    public bool enableLogging = true;
+
     private static int ID = 0;
 
     private static int generateId()
@@ -109,6 +111,11 @@ public class UnityMessageManager : MonoBehaviour
         else if (Application.platform == RuntimePlatform.IPhonePlayer)
         {
 #if UNITY_IOS && !UNITY_EDITOR
+
+            if (enableLogging)
+            {
+                Debug.Log("SendMessageToRN: " + message);
+            }
             onUnityMessage(message);
 #endif
         }

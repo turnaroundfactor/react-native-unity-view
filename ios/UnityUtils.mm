@@ -29,12 +29,19 @@ extern "C" bool UnityIsInited()
 }
 
 UnityFramework* UnityFrameworkLoad() {
+    NSLog(@"UnityFrameworkLoad");
     NSString* bundlePath = nil;
     bundlePath = [[NSBundle mainBundle] bundlePath];
     bundlePath = [bundlePath stringByAppendingString: @"/Frameworks/UnityFramework.framework"];
+     NSLog(@"bundlePath: %@", bundlePath);
 
     NSBundle* bundle = [NSBundle bundleWithPath: bundlePath];
-    if ([bundle isLoaded] == false) [bundle load];
+    if ([bundle isLoaded] == false) {
+        NSLog(@"bundle isLoaded is false");
+        [bundle load];
+    }else{
+        NSLog(@"bundle isLoaded is true");
+    }
 
     UnityFramework* ufw = [bundle.principalClass getInstance];
     return ufw;
@@ -42,12 +49,15 @@ UnityFramework* UnityFrameworkLoad() {
 
 extern "C" void InitUnity()
 {
+    NSLog(@"InitUnity start");
     if (unity_inited) {
+        NSLog(@"unity_inited is true");
         return;
     }
     unity_inited = true;
 
     ufw = UnityFrameworkLoad();
+    setIsUnityReady(YES);
 
     [ufw setDataBundleId: "com.unity3d.framework"];
     [ufw frameworkWarmup: g_argc argv: g_argv];
@@ -81,7 +91,13 @@ static BOOL _isUnityReady = NO;
 
 + (BOOL)isUnityReady
 {
+    NSLog(@"_isUnityReady: %s", _isUnityReady ? "true" : "false");
     return _isUnityReady;
+}
+
++ (BOOL) setIsUnityReady:(BOOL)value
+{
+    _isUnityReady = value;
 }
 
 + (void)handleAppStateDidChange:(NSNotification *)notification
@@ -126,32 +142,41 @@ static BOOL _isUnityReady = NO;
 
 + (void)createPlayer:(void (^)(void))completed
 {
+    NSLog(@"Inside CreatePlayer");
     if (_isUnityReady) {
+        NSLog(@"Unity PLayer is ready");
         completed();
         return;
     }
 
     [[NSNotificationCenter defaultCenter] addObserverForName:@"UnityReady" object:nil queue:[NSOperationQueue mainQueue]  usingBlock:^(NSNotification * _Nonnull note) {
+        NSLog(@"Unity PLayer is ready 2");
         _isUnityReady = YES;
         completed();
     }];
 
     if (UnityIsInited()) {
+        NSLog(@"UnityIsInited");
         return;
+    }
+    else{
+        NSLog(@"UnityIsInited NOT");
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"dispatch_get_main_queue()");
         UIApplication* application = [UIApplication sharedApplication];
 
         // Always keep RN window in top
         application.keyWindow.windowLevel = UIWindowLevelNormal + 1;
-
+        NSLog(@"Before InitUnity");
         InitUnity();
-        
+        NSLog(@"After InitUnity");
         UnityAppController *controller = GetAppController();
+        NSLog(@"after getappcontroller");
         [controller application:application didFinishLaunchingWithOptions:nil];
         [controller applicationDidBecomeActive:application];
-        
+
         // Makes RN window key window to handle events
         [application.windows[1] makeKeyWindow];
         

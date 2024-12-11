@@ -27,12 +27,16 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
 
-public static class XcodePostBuild {
+public static class XcodePostBuild
+{
     private const string TouchedMarker = "https://github.com/asmadsen/react-native-unity-view";
+    private const string TouchedMarkerTAF = "https://github.com/turnaroundfactor.com/adapt-ios";
 
     [PostProcessBuild]
-    public static void OnPostBuild(BuildTarget target, string pathToBuiltProject) {
-        if (target != BuildTarget.iOS) {
+    public static void OnPostBuild(BuildTarget target, string pathToBuiltProject)
+    {
+        if (target != BuildTarget.iOS)
+        {
             return;
         }
 
@@ -41,7 +45,8 @@ public static class XcodePostBuild {
         UpdateUnityProjectFiles(pathToBuiltProject);
     }
 
-    private static void UpdateUnityProjectFiles(string pathToBuiltProject) {
+    private static void UpdateUnityProjectFiles(string pathToBuiltProject)
+    {
         var pbx = new PBXProject();
         var pbxPath = Path.Combine(pathToBuiltProject, "Unity-iPhone.xcodeproj/project.pbxproj");
         pbx.ReadFromFile(pbxPath);
@@ -53,21 +58,23 @@ public static class XcodePostBuild {
         pbx.WriteToFile(pbxPath);
     }
 
-    private static void PatchUnityNativeCode(string pathToBuiltProject) {
+    private static void PatchUnityNativeCode(string pathToBuiltProject)
+    {
         EditUnityFrameworkH(Path.Combine(pathToBuiltProject, "UnityFramework/UnityFramework.h"));
         EditUnityAppControllerH(Path.Combine(pathToBuiltProject, "Classes/UnityAppController.h"));
         EditUnityAppControllerMM(Path.Combine(pathToBuiltProject, "Classes/UnityAppController.mm"));
         EditUnityViewMM(Path.Combine(pathToBuiltProject, "Classes/UI/UnityView.mm"));
     }
 
-    private static void EditUnityFrameworkH(string path) {
+    private static void EditUnityFrameworkH(string path)
+    {
         var inScope = false;
 
         EditCodeFile(path, line => {
             inScope |= line.Contains("- (void)runUIApplicationMainWithArgc:");
 
-            if (!inScope) return new string[] {line};
-            if (line.Trim() != "") return new string[] {line};
+            if (!inScope) return new string[] { line };
+            if (line.Trim() != "") return new string[] { line };
             inScope = false;
 
             return new string[] {
@@ -79,7 +86,8 @@ public static class XcodePostBuild {
         });
     }
 
-    private static void EditUnityAppControllerH(string path) {
+    private static void EditUnityAppControllerH(string path)
+    {
         var inScope = false;
         var markerDetected = false;
 
@@ -87,8 +95,8 @@ public static class XcodePostBuild {
         EditCodeFile(path, line => {
             inScope |= line.Contains("include \"RenderPluginDelegate.h\"");
 
-            if (!inScope || markerDetected) return new string[] {line};
-            if (line.Trim() != "") return new string[] {line};
+            if (!inScope || markerDetected) return new string[] { line };
+            if (line.Trim() != "") return new string[] { line };
             inScope = false;
             markerDetected = true;
 
@@ -98,6 +106,9 @@ public static class XcodePostBuild {
                 "@protocol UnityEventListener <NSObject>",
                 "- (void)onMessage:(NSString *)message;",
                 "@end",
+                "",
+                "// Added by " + TouchedMarkerTAF,
+                "typedef void(^UnityVideoFrameBlock)(void*, int, int, int);",
                 "",
             };
         });
@@ -109,13 +120,16 @@ public static class XcodePostBuild {
         EditCodeFile(path, line => {
             inScope |= line.Contains("quitHandler)");
 
-            if (!inScope || markerDetected) return new string[] {line};
-            if (line.Trim() != "") return new string[] {line};
+            if (!inScope || markerDetected) return new string[] { line };
+            if (line.Trim() != "") return new string[] { line };
             inScope = false;
             markerDetected = true;
 
             return new string[] {
                 "@property (nonatomic, copy)                                 void(^unityMessageHandler)(const char* message);",
+                "",
+                "// Added by " + TouchedMarker,
+                "@property (nonatomic, copy)                                 UnityVideoFrameBlock unityVideoFrameHandler;",
             };
         });
 
@@ -126,8 +140,8 @@ public static class XcodePostBuild {
         EditCodeFile(path, line => {
             inScope |= line.Contains("- (void)startUnity:");
 
-            if (!inScope) return new string[] {line};
-            if (line.Trim() != "") return new string[] {line};
+            if (!inScope) return new string[] { line };
+            if (line.Trim() != "") return new string[] { line };
             inScope = false;
 
             return new string[] {
@@ -145,8 +159,8 @@ public static class XcodePostBuild {
         EditCodeFile(path, line => {
             inScope |= line.Contains("extern UnityAppController* GetAppController");
 
-            if (!inScope || markerDetected) return new string[] {line};
-            if (line.Trim() != "") return new string[] {"// " + line};
+            if (!inScope || markerDetected) return new string[] { line };
+            if (line.Trim() != "") return new string[] { "// " + line };
             inScope = false;
             markerDetected = true;
 
@@ -163,12 +177,14 @@ public static class XcodePostBuild {
         });
     }
 
-    private static void EditUnityAppControllerMM(string path) {
+    private static void EditUnityAppControllerMM(string path)
+    {
         var inScope = false;
         var markerDetected = false;
 
         EditCodeFile(path, line => {
-            if (line.Trim() == "@end") {
+            if (line.Trim() == "@end")
+            {
                 return new string[] {
                     "",
                     "// Added by " + TouchedMarker,
@@ -190,6 +206,23 @@ public static class XcodePostBuild {
                     "        GetAppController().unityMessageHandler(message);",
                     "    }",
                     "}",
+                    "",
+                    "// Added by " + TouchedMarkerTAF,
+                    "extern \"C\" void onUnityVideoFrame(void* bytes, int length, int width, int height)",
+                    "{",
+                    "    if (GetAppController().unityVideoFrameHandler) {",
+                    "        GetAppController().unityVideoFrameHandler(bytes, length, width, height);",
+                    "    }",
+                    "}",
+                    /*
+                    "",
+                    "// Added by " + TouchedMarkerTAF,
+                    "- (void) dealloc",
+                    "{",
+                    "    [unityVideoFrameHandler release]",
+                    "    [super dealloc]",
+                    "}",
+                    */
                     line,
                 };
             }
@@ -197,13 +230,15 @@ public static class XcodePostBuild {
             inScope |= line.Contains("- (void)startUnity:");
             markerDetected |= inScope && line.Contains(TouchedMarker);
 
-            if (!inScope || line.Trim() != "}") return new string[] {line};
+            if (!inScope || line.Trim() != "}") return new string[] { line };
             inScope = false;
 
-            if (markerDetected) {
-                return new string[] {line};
+            if (markerDetected)
+            {
+                return new string[] { line };
             }
-            else {
+            else
+            {
                 return new string[] {
                     "    // Modified by " + TouchedMarker,
                     @"    [[NSNotificationCenter defaultCenter] postNotificationName: @""UnityReady"" object:self];",
@@ -220,8 +255,8 @@ public static class XcodePostBuild {
         EditCodeFile(path, line => {
             inScope |= line.Contains("UnityAppController* GetAppController()");
 
-            if (!inScope || markerDetected) return new string[] {line};
-            if (line.Trim() != "}") return new string[] {"// " + line};
+            if (!inScope || markerDetected) return new string[] { line };
+            if (line.Trim() != "}") return new string[] { "// " + line };
             inScope = false;
             markerDetected = true;
 
@@ -238,27 +273,29 @@ public static class XcodePostBuild {
         EditCodeFile(path, line => {
             inScope |= line.Contains("@synthesize quitHandler");
 
-            if (!inScope || markerDetected) return new string[] {line};
-            if (line.Trim() != "") return new string[] {line};
+            if (!inScope || markerDetected) return new string[] { line };
+            if (line.Trim() != "") return new string[] { line };
             inScope = false;
             markerDetected = true;
 
             return new string[] {
                 "@synthesize unityMessageHandler     = _unityMessageHandler;",
+                "@synthesize unityVideoFrameHandler  = _unityVideoFrameHandler;",
             };
 
         });
     }
 
-    private static void EditUnityViewMM(string path) {
+    private static void EditUnityViewMM(string path)
+    {
         var inScope = false;
 
         // Add frameworkWarmup method
         EditCodeFile(path, line => {
             inScope |= line.Contains("UnityGetRenderingResolution(&requestedW, &requestedH)");
 
-            if (!inScope) return new string[] {line};
-            if (line.Trim() != "") return new string[] {line};
+            if (!inScope) return new string[] { line };
+            if (line.Trim() != "") return new string[] { line };
             inScope = false;
 
             return new string[] {
@@ -276,9 +313,11 @@ public static class XcodePostBuild {
         });
     }
 
-    private static void EditCodeFile(string path, Func<string, IEnumerable<string>> lineHandler) {
+    private static void EditCodeFile(string path, Func<string, IEnumerable<string>> lineHandler)
+    {
         var bakPath = path + ".bak";
-        if (File.Exists(bakPath)) {
+        if (File.Exists(bakPath))
+        {
             File.Delete(bakPath);
         }
 
@@ -286,11 +325,14 @@ public static class XcodePostBuild {
 
         using (var reader = File.OpenText(bakPath))
         using (var stream = File.Create(path))
-        using (var writer = new StreamWriter(stream)) {
+        using (var writer = new StreamWriter(stream))
+        {
             string line;
-            while ((line = reader.ReadLine()) != null) {
+            while ((line = reader.ReadLine()) != null)
+            {
                 var outputs = lineHandler(line);
-                foreach (var o in outputs) {
+                foreach (var o in outputs)
+                {
                     writer.WriteLine(o);
                 }
             }

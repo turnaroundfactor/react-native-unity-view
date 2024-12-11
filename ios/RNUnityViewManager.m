@@ -11,10 +11,13 @@ RCT_EXPORT_MODULE(RNUnityView)
 {
     self.currentView = [[RNUnityView alloc] init];
     if ([UnityUtils isUnityReady]) {
-        [self.currentView setUnityView: [GetAppController() unityView]];
+        NSLog(@"isUnityReady yes");
+        [self.currentView setUnityView: (RNUnityView *)[GetAppController() unityView]];
     } else {
+        NSLog(@"isUnityReady no"); // this is getting called
         [UnityUtils createPlayer:^{
-            [self.currentView setUnityView: [GetAppController() unityView]];
+           NSLog(@"createPlayer building view"); // this is not getting called
+            [self.currentView setUnityView: (RNUnityView *)[GetAppController() unityView]]; //we are not getting the calls in here to happen
         }];
         [GetAppController() setUnityMessageHandler: ^(const char* message) {
             [_bridge.eventDispatcher sendDeviceEventWithName:@"onUnityMessage"

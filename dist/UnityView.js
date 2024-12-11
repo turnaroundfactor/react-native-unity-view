@@ -3,10 +3,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -23,7 +25,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var react_native_1 = require("react-native");
 var MessageHandler_1 = require("./MessageHandler");
@@ -44,7 +46,7 @@ var UnityView = /** @class */ (function (_super) {
         var _a = this.props, onUnityMessage = _a.onUnityMessage, onMessage = _a.onMessage;
         this.setState({
             handle: UnityModule_1.UnityModule.addMessageListener(function (message) {
-                if (onUnityMessage && message instanceof MessageHandler_1["default"]) {
+                if (onUnityMessage && message instanceof MessageHandler_1.default) {
                     onUnityMessage(message);
                 }
                 if (onMessage && typeof message === 'string') {
@@ -58,6 +60,8 @@ var UnityView = /** @class */ (function (_super) {
     };
     UnityView.prototype.render = function () {
         var props = this.props;
+        console.log('rendering unity view');
+        console.log(props);
         return (React.createElement(react_native_1.View, __assign({}, props),
             React.createElement(NativeUnityView, { style: { position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }, onUnityMessage: props.onUnityMessage, onMessage: props.onMessage }),
             props.children));
@@ -95,6 +99,6 @@ const UnityView = ({ onUnityMessage, onMessage, ...props } : UnityViewProps) => 
     )
 }
 */
-NativeUnityView = react_native_1.requireNativeComponent('RNUnityView', UnityView);
-exports["default"] = UnityView;
+NativeUnityView = (0, react_native_1.requireNativeComponent)('RNUnityView');
+exports.default = UnityView;
 //# sourceMappingURL=UnityView.js.map

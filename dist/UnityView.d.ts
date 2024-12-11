@@ -19,6 +19,6 @@ declare class UnityView extends Component<UnityViewProps> {
     };
     componentDidMount(): void;
     componentWillUnmount(): void;
-    render(): JSX.Element;
+    render(): React.JSX.Element;
 }
 export default UnityView;
