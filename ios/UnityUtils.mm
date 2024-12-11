@@ -98,6 +98,7 @@ static BOOL _isUnityReady = NO;
 + (BOOL) setIsUnityReady:(BOOL)value
 {
     _isUnityReady = value;
+    return value;
 }
 
 + (void)handleAppStateDidChange:(NSNotification *)notification
