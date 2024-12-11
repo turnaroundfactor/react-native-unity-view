@@ -95,11 +95,11 @@ static BOOL _isUnityReady = NO;
     return _isUnityReady;
 }
 
-+ (BOOL) setIsUnityReady:(BOOL)value
-{
-    _isUnityReady = value;
-    return value;
-}
+//+ (BOOL) setIsUnityReady:(BOOL)value
+//{
+//    _isUnityReady = value;
+//    return value;
+//}
 
 + (void)handleAppStateDidChange:(NSNotification *)notification
 {
